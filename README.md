@@ -1,6 +1,7 @@
 # AI Chatbot Application
 
-This is a wrapper application for https://ai.google.dev/gemma/docs/gemma_chat
+- This is a wrapper application for https://ai.google.dev/gemma/docs/gemma_chat
+- Most of the code is written by Claude Opus 4.1 in Zed.
 
 A modern, responsive web-based chatbot application powered by Google's Gemma model with a FastAPI backend and interactive UI.
 
