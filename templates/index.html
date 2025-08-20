@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AI Chatbot</title>
+        <link rel="stylesheet" href="/static/styles.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+    </head>
+    <body>
+        <div class="container">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-content">
+                    <i class="fas fa-robot"></i>
+                    <h1>AI Assistant</h1>
+                    <span class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span class="status-text">Online</span>
+                    </span>
+                </div>
+                <div class="header-actions">
+                    <button id="clearChat" class="btn-icon" title="Clear Chat">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button
+                        id="newSession"
+                        class="btn-icon"
+                        title="New Session"
+                    >
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button
+                        id="toggleDebug"
+                        class="btn-icon"
+                        title="Inner Workings"
+                    >
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Inner Workings Panel -->
+            <div id="debugPanel" class="debug-panel">
+                <div class="debug-header">
+                    <i class="fas fa-terminal"></i>
+                    <span>Inner Workings - Last Prompt Sent to LLM</span>
+                    <button id="closeDebug" class="btn-icon-small">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="debug-content">
+                    <div class="debug-legend">
+                        <span class="legend-title">Token Legend:</span>
+                        <span class="legend-item">
+                            <span class="token token-user mini"
+                                >&lt;start&gt;</span
+                            >
+                            User
+                        </span>
+                        <span class="legend-item">
+                            <span class="token token-model mini"
+                                >&lt;start&gt;</span
+                            >
+                            Model
+                        </span>
+                        <span class="legend-item">
+                            <span class="token token-end mini"
+                                >&lt;end&gt;</span
+                            >
+                            Turn End
+                        </span>
+                    </div>
+                    <pre id="debugPrompt">
+No prompts sent yet. Send a message to see what's being sent to the LLM.</pre
+                    >
+                </div>
+            </div>
+
+            <!-- Chat Container -->
+            <div class="chat-container" id="chatContainer">
+                <div class="welcome-message">
+                    <i class="fas fa-comments"></i>
+                    <h2>Welcome to AI Assistant</h2>
+                    <p>Start a conversation by typing a message below</p>
+                    <div class="suggested-prompts">
+                        <button
+                            class="prompt-chip"
+                            data-prompt="What can you help me with?"
+                        >
+                            What can you help me with?
+                        </button>
+                        <button
+                            class="prompt-chip"
+                            data-prompt="Tell me an interesting fact"
+                        >
+                            Tell me an interesting fact
+                        </button>
+                        <button
+                            class="prompt-chip"
+                            data-prompt="How does AI work?"
+                        >
+                            How does AI work?
+                        </button>
+                        <button
+                            class="prompt-chip"
+                            data-prompt="Write a short story"
+                        >
+                            Write a short story
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <textarea
+                        id="messageInput"
+                        class="message-input"
+                        placeholder="Type your message here..."
+                        rows="1"
+                        maxlength="2000"
+                    ></textarea>
+                    <button id="sendButton" class="send-button" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="input-info">
+                    <span id="charCount">0 / 2000</span>
+                    <span class="session-info">
+                        Session: <span id="sessionId">New</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Error Toast -->
+        <div id="errorToast" class="toast error-toast">
+            <i class="fas fa-exclamation-circle"></i>
+            <span id="errorMessage"></span>
+            <button class="toast-close" onclick="hideError()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <!-- Success Toast -->
+        <div id="successToast" class="toast success-toast">
+            <i class="fas fa-check-circle"></i>
+            <span id="successMessage"></span>
+        </div>
+
+        <script src="/static/script.js"></script>
+    </body>
+</html>

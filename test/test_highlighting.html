@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Highlighting Test</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary-color: #22d3ee;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --surface-light: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 2rem;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+        }
+
+        .debug-panel {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+
+        .debug-legend {
+            background: var(--surface-light);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+        }
+
+        .legend-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-right: 0.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        pre {
+            background: var(--background);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: "Consolas", "Monaco", "Courier New", monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            margin: 0;
+            overflow-x: auto;
+        }
+
+        /* Token highlighting styles */
+        .token {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            margin: 0 2px;
+            font-size: 0.85rem;
+            font-family: "Consolas", "Monaco", "Courier New", monospace;
+        }
+
+        .token-user {
+            background-color: rgba(99, 102, 241, 0.3);
+            color: #a5b4fc;
+            border: 1px solid rgba(99, 102, 241, 0.5);
+        }
+
+        .token-model {
+            background-color: rgba(34, 211, 238, 0.3);
+            color: #67e8f9;
+            border: 1px solid rgba(34, 211, 238, 0.5);
+        }
+
+        .token-end {
+            background-color: rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .token.mini {
+            font-size: 0.75rem;
+            padding: 1px 4px;
+            margin: 0;
+        }
+
+        /* Role labels */
+        .role {
+            display: inline-block;
+            padding: 2px 8px;
+            margin-left: 4px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .role-user {
+            background-color: rgba(99, 102, 241, 0.2);
+            color: #c7d2fe;
+        }
+
+        .role-model {
+            background-color: rgba(34, 211, 238, 0.2);
+            color: #a5f3fc;
+        }
+
+        /* Prompt line highlighting */
+        .prompt-line {
+            display: inline-block;
+            width: 100%;
+            padding-left: 4px;
+            margin-left: -4px;
+            border-left: 3px solid transparent;
+        }
+
+        .prompt-line-user {
+            border-left-color: #6366f1;
+            background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%);
+        }
+
+        .prompt-line-model {
+            border-left-color: #22d3ee;
+            background: linear-gradient(90deg, rgba(34, 211, 238, 0.1) 0%, transparent 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Token Highlighting Preview</h1>
+
+        <div class="debug-panel">
+            <div class="debug-legend">
+                <span class="legend-title">Token Legend:</span>
+                <span class="legend-item">
+                    <span class="token token-user mini">&lt;start&gt;</span>
+                    User
+                </span>
+                <span class="legend-item">
+                    <span class="token token-model mini">&lt;start&gt;</span>
+                    Model
+                </span>
+                <span class="legend-item">
+                    <span class="token token-end mini">&lt;end&gt;</span>
+                    Turn End
+                </span>
+            </div>
+
+            <pre id="examplePrompt">You are a helpful, friendly AI assistant.
+You provide clear, concise, and accurate responses to user queries.
+Be engaging and maintain context throughout the conversation.
+
+<span class="prompt-line prompt-line-user"><span class="token token-user">&lt;start_of_turn&gt;</span><span class="role role-user">user</span></span>
+Hello, how are you?
+<span class="token token-end">&lt;end_of_turn&gt;</span>
+<span class="prompt-line prompt-line-model"><span class="token token-model">&lt;start_of_turn&gt;</span><span class="role role-model">model</span></span>
+I'm doing well, thank you for asking! I'm here and ready to help you with any questions or tasks you might have. How can I assist you today?
+<span class="prompt-line prompt-line-user"><span class="token token-user">&lt;start_of_turn&gt;</span><span class="role role-user">user</span></span>
+What is artificial intelligence?
+<span class="token token-end">&lt;end_of_turn&gt;</span>
+<span class="prompt-line prompt-line-model"><span class="token token-model">&lt;start_of_turn&gt;</span><span class="role role-model">model</span></span></pre>
+        </div>
+
+        <div style="margin-top: 2rem; padding: 1rem; background: var(--surface-light); border-radius: 0.5rem;">
+            <h3 style="color: var(--primary-light); margin-bottom: 1rem;">Features Demonstrated:</h3>
+            <ul style="color: var(--text-secondary); line-height: 1.8;">
+                <li>✨ <strong>Color-coded tokens:</strong> Each token type has a distinct color</li>
+                <li>🏷️ <strong>Role labels:</strong> "USER" and "MODEL" are clearly labeled</li>
+                <li>📍 <strong>Line indicators:</strong> Colored left border shows user vs model sections</li>
+                <li>🎨 <strong>Gradient backgrounds:</strong> Subtle gradients for better visual separation</li>
+                <li>📖 <strong>Legend:</strong> Quick reference for understanding the color coding</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
